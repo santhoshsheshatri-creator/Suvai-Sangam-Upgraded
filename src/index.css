@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Arima:wght@400;500;600;700&family=Mukta+Malar:wght@200;300;400;500;600;700;800&family=Kavivanar&family=Baloo+Thambi+2:wght@400;500;600;700;800&family=Hind+Madurai:wght@300;400;500;600;700&family=Catamaran:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Playfair Display", "Arima", serif;
+  --font-sans: "Inter", "Hind Madurai", sans-serif;
+  --font-tamil-stylish: "Arima", "Kavivanar", cursive;
+  --font-tamil-body: "Hind Madurai", "Catamaran", sans-serif;
+
+  --color-primary: #8B0000; /* Deep Maroon / Kumkum */
+  --color-bg: #FDFBF7;
+  --color-card: #F9F6ED;
+  --color-accent: #FFB300; /* Turmeric Yellow */
+  --color-text: #2D2926;
+  --color-muted: #8E8B82;
+  --color-leaf-light: #F1F8E9;
+  --color-leaf-medium: #558B2F;
+  --color-leaf-dark: #1B4D1B; /* Deep Banana Leaf Green */
+  --color-gold: #D4AF37; /* Temple Gold */
+  --color-sandal: #FDF5E6; /* Sandalwood */
+  --color-royal-blue: #002366;
+  --color-deep-orange: #E65100;
+  --color-vibrant-green: #2E7D32;
+
+  /* Standard Color Overrides for html2canvas compatibility */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-transparent: transparent;
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+  --color-red-500: #ef4444;
+  --color-red-600: #dc2626;
+  --color-green-500: #22c55e;
+  --color-green-600: #16a34a;
+  --color-blue-500: #3b82f6;
+  --color-blue-600: #2563eb;
+  --color-amber-500: #f59e0b;
+  --color-amber-600: #d97706;
+  --color-blue-500: #3b82f6;
+  --color-blue-600: #2563eb;
+}
+
+@layer utilities {
+  .tamil-highlight {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    padding: 0 6px;
+    letter-spacing: -0.01em;
+  }
+  
+  .tamil-highlight::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 0;
+    width: 100%;
+    height: 35%;
+    background: linear-gradient(90deg, var(--color-accent), var(--color-gold));
+    opacity: 0.3;
+    z-index: -1;
+    border-radius: 4px;
+    transform: skewX(-15deg);
+    filter: blur(0.5px);
+  }
+
+  .tamil-glow {
+    text-shadow: 0 0 15px rgba(139, 0, 0, 0.1);
+  }
+}
+
+body {
+  @apply bg-[var(--color-bg)] text-[var(--color-text)] font-sans min-h-screen;
+  font-family: var(--font-sans), var(--font-tamil-body) !important;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 50m-40 0a40 40 0 1 0 80 0a40 40 0 1 0 -80 0' fill='none' stroke='%238B0000' stroke-opacity='0.02' stroke-width='0.5'/%3E%3Ccircle cx='50' cy='50' r='2' fill='%238B0000' fill-opacity='0.03'/%3E%3Cpath d='M50 10 L50 90 M10 50 L90 50' stroke='%238B0000' stroke-opacity='0.02' stroke-width='0.5'/%3E%3C/svg%3E");
+}
+
+h1, h2, h3, h4, .font-serif {
+  @apply font-serif tracking-tight;
+  font-family: var(--font-serif), var(--font-tamil-stylish) !important;
+  color: var(--color-text);
+}
+
+.font-tamil-body h1, 
+.font-tamil-body h2, 
+.font-tamil-body h3, 
+.font-tamil-body h4,
+.font-tamil-body .font-serif {
+  font-family: var(--font-tamil-stylish) !important;
+}
+
+.suvai-card {
+  @apply bg-white rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.04)] overflow-hidden border border-[var(--color-primary)]/5;
+  background-image: linear-gradient(to bottom right, white, var(--color-sandal));
+}
+
+.suvai-input {
+  @apply w-full p-4 rounded-xl bg-[var(--color-card)] border-none outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition-all font-medium text-[var(--color-text)] placeholder:text-[var(--color-muted)];
+}
+
+.suvai-btn {
+  @apply bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-leaf-dark)] text-white font-bold rounded-xl transition-all active:scale-95 hover:shadow-lg hover:shadow-[var(--color-primary)]/20 hover:-translate-y-0.5 px-8 py-4 flex items-center justify-center gap-2;
+}
+
+.suvai-btn-outline {
+  @apply border-2 border-[var(--color-primary)] text-[var(--color-primary)] font-bold rounded-xl transition-all active:scale-95 hover:bg-gradient-to-br hover:from-[var(--color-primary)] hover:to-[var(--color-leaf-dark)] hover:text-white hover:border-transparent px-8 py-4 flex items-center justify-center gap-2;
+}
+
+.banana-leaf-card {
+  @apply bg-white rounded-[2.5rem] border-l-[10px] border-[var(--color-leaf-dark)] shadow-[0_15px_45px_rgba(0,0,0,0.06)] overflow-hidden;
+  position: relative;
+}
+
+.label-title {
+  @apply text-lg font-serif font-bold text-[var(--color-text)] flex items-center gap-2;
+}
+
+.label-subtitle {
+  @apply text-[10px] font-sans font-medium text-[var(--color-muted)] uppercase tracking-wider block;
+}

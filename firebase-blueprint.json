@@ -1,0 +1,58 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Stores user profile and history",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email"]
+    },
+    "MealPlan": {
+      "title": "Meal Plan",
+      "description": "Stores generated meal plans for users",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "planData": { "type": "object" },
+        "profile": { "type": "object" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "duration": { "type": "string", "enum": ["7-day"] },
+        "paymentId": { "type": "string" }
+      },
+      "required": ["userId", "planData", "createdAt"]
+    },
+    "Feedback": {
+      "title": "Feedback",
+      "description": "User feedback and ratings",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "userEmail": { "type": "string" },
+        "rating": { "type": "number" },
+        "comment": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["rating", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profile data"
+    },
+    "/users/{userId}/plans/{planId}": {
+      "schema": "MealPlan",
+      "description": "User's generated meal plans"
+    },
+    "/feedback/{feedbackId}": {
+      "schema": "Feedback",
+      "description": "General user feedback"
+    }
+  }
+}
