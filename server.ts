@@ -70,9 +70,11 @@ app.get("/api/health", (req, res) => {
 });
 
 app.post("/api/payment/order", async (req, res) => {
+  console.log("POST /api/payment/order - Body:", req.body);
   try {
     const { amount, currency = "INR" } = req.body;
-    if (!amount || isNaN(Number(amount))) {
+    if (amount === undefined || amount === null || isNaN(Number(amount))) {
+      console.error("Invalid amount received:", amount);
       return res.status(400).json({ error: "Invalid amount" });
     }
 
@@ -83,7 +85,9 @@ app.post("/api/payment/order", async (req, res) => {
       receipt: `receipt_${Date.now()}`,
     };
 
+    console.log("Creating Razorpay order with options:", options);
     const order = await razorpay.orders.create(options);
+    console.log("Razorpay order created successfully:", order.id);
     res.json(order);
   } catch (error: any) {
     console.error("Razorpay Order Error:", error);

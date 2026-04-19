@@ -223,7 +223,7 @@ export async function generateTamilMealPlan(profile: UserProfile): Promise<any> 
   }
 
   // Simulate a small delay for better UX (so it doesn't feel "too" instant, though it is)
-  await new Promise(resolve => setTimeout(resolve, 800));
+  await new Promise(resolve => setTimeout(resolve, 400));
 
   return {
     ...personalizedPlan,
