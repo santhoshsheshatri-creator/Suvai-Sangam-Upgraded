@@ -93,7 +93,7 @@ const TRANSLATIONS: Record<string, Record<string, string>> = {
   budgetStaples: { tamil: 'பட்ஜெட் & அடிப்படை உணவுகள்', english: 'Budget & Staples' },
   affordItems: { tamil: 'இந்த பொருட்களை எவ்வளவு அடிக்கடி வாங்க முடியும்?', english: 'How often can you afford these items?' },
   generatePlan: { tamil: 'உங்கள் தனிப்பயனாக்கப்பட்ட உணவுத் திட்டத்தைக் காணுங்கள்', english: 'Reveal Your Personalized Diet Plan' },
-  downloadPdf: { tamil: 'உங்கள் ₹20 ஆரோக்கிய வழிகாட்டியைப் பெறுங்கள்', english: 'Get Your ₹20 Health Guide' },
+  downloadPdf: { tamil: 'உங்கள் ஆரோக்கிய வழிகாட்டியைப் பெறுங்கள்', english: 'Get Your Health Guide' },
   back: { tamil: 'பின்னால்', english: 'Back' },
   nextStep: { tamil: 'அடுத்த படி', english: 'Next Step' },
   limitedOffer: { tamil: 'அறிமுகச் சலுகை: ₹20 மட்டும் (உண்மையான விலை ₹199)', english: 'Launch Offer: Only ₹20 (Original Price ₹199)' },
@@ -1116,136 +1116,56 @@ export default function App() {
 
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = pdf.internal.pageSize.getHeight();
-      const margin = 15;
+      const margin = 10; // Slightly smaller margin
       const contentWidth = pdfWidth - (2 * margin);
       
       const captureAndAdd = async (el: HTMLElement, isNewPage = false) => {
         const clone = el.cloneNode(true) as HTMLElement;
         
-        // PDF styling for the section - High resolution and much larger fonts
-        clone.style.width = '1400px'; // Slightly smaller width for better scaling
-        clone.style.padding = '60px';
+        // PDF styling for the section - Optimized resolution
+        clone.style.width = '1000px'; // Moderate width for faster processing
+        clone.style.padding = '40px';
         clone.style.backgroundColor = '#ffffff';
         clone.style.color = '#000000';
-        clone.style.fontFamily = '"Inter", "Mukta Malar", "Baloo Thambi 2", sans-serif';
+        clone.style.fontFamily = 'serif';
         
-        // Clean up styles for PDF and enforce much larger fonts
+        // Clean up styles for PDF - Performance optimized
         const all = clone.querySelectorAll('*');
         all.forEach(item => {
           const htmlItem = item as HTMLElement;
           
-          // Preserve colors and gradients but ensure they are visible
           if (htmlItem.classList.contains('tamil-highlight')) {
              htmlItem.style.backgroundColor = '#FFB300';
-             htmlItem.style.padding = '0 8px';
-             htmlItem.style.borderRadius = '4px';
-          }
-
-          if (htmlItem.classList.contains('macro-label-protein')) {
-            htmlItem.style.backgroundColor = '#8B0000';
-            htmlItem.style.color = '#ffffff';
-            htmlItem.style.padding = '4px 16px';
-            htmlItem.style.borderRadius = '20px';
-            htmlItem.style.display = 'inline-block';
-          }
-          if (htmlItem.classList.contains('macro-label-carbs')) {
-            htmlItem.style.backgroundColor = '#FFB300';
-            htmlItem.style.color = '#000000';
-            htmlItem.style.padding = '4px 16px';
-            htmlItem.style.borderRadius = '20px';
-            htmlItem.style.display = 'inline-block';
-          }
-          if (htmlItem.classList.contains('macro-label-fats')) {
-            htmlItem.style.backgroundColor = '#1B4D1B';
-            htmlItem.style.color = '#ffffff';
-            htmlItem.style.padding = '4px 16px';
-            htmlItem.style.borderRadius = '20px';
-            htmlItem.style.display = 'inline-block';
-          }
-          if (htmlItem.classList.contains('pdf-grocery-list')) {
-            htmlItem.style.backgroundColor = '#1B4D1B'; // Deep Leaf Green
-            htmlItem.style.color = '#ffffff';
-          }
-          if (htmlItem.classList.contains('pdf-tips-section')) {
-            htmlItem.style.backgroundColor = '#FFB300'; // Turmeric Yellow
-            htmlItem.style.color = '#000000';
           }
 
           if (['H1', 'H2', 'H3', 'H4'].includes(htmlItem.tagName)) {
-            htmlItem.style.fontSize = '72px';
-            htmlItem.style.marginBottom = '30px';
-            htmlItem.style.color = '#8B0000';
-            htmlItem.style.fontWeight = '900';
+            htmlItem.style.fontSize = '48px';
+            htmlItem.style.marginBottom = '20px';
+            htmlItem.style.color = '#1B4D1B';
+            htmlItem.style.fontWeight = 'bold';
             htmlItem.style.textAlign = 'center';
-            htmlItem.style.display = 'block';
           } else if (['P', 'SPAN', 'LI', 'DIV'].includes(htmlItem.tagName)) {
-            const currentSize = parseInt(window.getComputedStyle(htmlItem).fontSize);
-            // Enforce a minimum large font size for PDF readability
-            if (currentSize < 16) htmlItem.style.fontSize = '48px';
-            else htmlItem.style.fontSize = (currentSize * 4.5) + 'px';
-            htmlItem.style.lineHeight = '1.1';
-            htmlItem.style.fontWeight = '700';
+            htmlItem.style.fontSize = '24px';
+            htmlItem.style.lineHeight = '1.3';
           }
           
-          // Ensure icons/emojis are appropriately sized (medium size)
-          if (htmlItem.innerText && htmlItem.innerText.length <= 4 && /[\uD800-\uDBFF][\uDC00-\uDFFF]/.test(htmlItem.innerText)) {
-            htmlItem.style.fontSize = '32px';
-            htmlItem.style.display = 'inline-block';
-            htmlItem.style.lineHeight = '1';
-            htmlItem.style.verticalAlign = 'middle';
-            htmlItem.style.marginRight = '10px';
-            // Also shrink the container of the icon if it has one
-            if (htmlItem.parentElement && htmlItem.parentElement.classList.contains('bg-white')) {
-              htmlItem.parentElement.style.padding = '6px';
-              htmlItem.parentElement.style.borderRadius = '10px';
-            }
-          }
-
-          if (htmlItem.classList.contains('bg-white') || htmlItem.classList.contains('bg-gray-50') || htmlItem.classList.contains('bg-[var(--color-card)]')) {
-            htmlItem.style.backgroundColor = '#ffffff';
-            htmlItem.style.border = '2px solid #8B0000';
-            htmlItem.style.borderRadius = '25px';
-            htmlItem.style.padding = '25px';
-            htmlItem.style.marginBottom = '15px';
-          }
-          
-          // Ensure macro bars are visible
-          if (htmlItem.classList.contains('h-3') && htmlItem.classList.contains('w-full')) {
-            htmlItem.style.height = '30px';
-            htmlItem.style.backgroundColor = '#f3f4f6';
-            htmlItem.style.border = '2px solid #e5e7eb';
-            htmlItem.style.display = 'flex';
-            htmlItem.style.overflow = 'hidden';
+          if (htmlItem.classList.contains('bg-white') || htmlItem.classList.contains('bg-gray-50')) {
+            htmlItem.style.border = '1px solid #1B4D1B';
             htmlItem.style.borderRadius = '15px';
-            
-            // Style the children (the bars)
-            Array.from(htmlItem.children).forEach((child: any) => {
-              child.style.height = '100%';
-              if (child.classList.contains('bg-[var(--color-primary)]')) child.style.backgroundColor = '#1B4D1B';
-              if (child.classList.contains('bg-[var(--color-accent)]')) child.style.backgroundColor = '#FFB300';
-              if (child.classList.contains('bg-[var(--color-leaf-dark)]')) child.style.backgroundColor = '#558B2F';
-            });
-          }
-          
-          // Reduce gaps in the PDF clone
-          if (htmlItem.classList.contains('space-y-8') || htmlItem.classList.contains('md:space-y-12')) {
-            htmlItem.style.gap = '15px';
-          }
-          if (htmlItem.classList.contains('p-6') || htmlItem.classList.contains('md:p-10')) {
-            htmlItem.style.padding = '20px';
+            htmlItem.style.padding = '15px';
+            htmlItem.style.marginBottom = '10px';
           }
         });
 
-        // Hide non-pdf elements
+        // Hide UI-only elements
         clone.querySelectorAll('.no-pdf, button').forEach(item => (item as HTMLElement).style.display = 'none');
 
         document.body.appendChild(clone);
-        // Drastically reduced wait time and optimized capture
-        await new Promise(resolve => setTimeout(resolve, 200));
+        await new Promise(resolve => setTimeout(resolve, 50)); // Minimum wait
 
         const dataUrl = await toJpeg(clone, {
-          quality: 0.75, 
-          pixelRatio: 1.0, // Significant speed up
+          quality: 0.6, // Further reduced quality for speed
+          pixelRatio: 1, 
           backgroundColor: '#ffffff',
         });
 
