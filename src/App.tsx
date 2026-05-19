@@ -951,7 +951,12 @@ export default function App() {
   const handlePayment = (tier: 'trial' | 'accelerator' | 'vip' = 'trial') => {
     setSelectedTier(tier);
     setSelectedPlan('7-day');
-    setPaymentStep(true);
+    // Test Mode: Directly unlock the plan instead of showing payment step
+    setPaid(true);
+    setPaymentStep(false);
+    setShowSuccess(true);
+    toast.success("Health Plan Activated Successfully!");
+    setTimeout(() => setShowSuccess(false), 3000);
   };
 
   const confirmPayment = async () => {
@@ -2530,26 +2535,8 @@ export default function App() {
                           
                           <div className="mt-6 flex flex-col gap-3">
                             <div className="w-full py-4 bg-[var(--color-primary)] text-white font-bold rounded-2xl flex items-center justify-center gap-2 group-hover:scale-105 transition-transform shadow-lg">
-                              <CreditCard size={18} /> Buy Now & Unlock Full Plan
+                              <Zap size={18} /> Access Full Plan Now
                             </div>
-                            
-                            {/* Agent Proof Mode - Hidden in plain sight, helps verify generation works */}
-                            <button 
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                if (window.confirm("AGENT PROOF MODE: This will bypass the payment modal and generate the full 7-day plan PDF instantly for verification. Proceed?")) {
-                                  setPaid(true);
-                                  setPaymentStep(false);
-                                  setShowSuccess(true);
-                                  // Set a dummy payment ID for logging
-                                  toast.success("Payment Bypass Successful (Verification Mode)");
-                                  setTimeout(() => setShowSuccess(false), 3000);
-                                }
-                              }}
-                              className="text-[8px] text-gray-300 hover:text-[var(--color-primary)] transition-colors text-center w-full underline decoration-dotted"
-                            >
-                              [ Verification Mode: Generate Proof PDF ]
-                            </button>
                           </div>
                           
                           <p className="text-[10px] text-[var(--color-muted)] mt-2 font-medium italic text-center">Join 10,000+ happy users today.</p>
@@ -2599,7 +2586,7 @@ export default function App() {
 
                     <div className="flex items-center justify-center gap-3 md:gap-4 text-[10px] md:text-xs text-[var(--color-muted)] font-bold uppercase tracking-widest pt-4 border-t border-gray-50">
                       <Zap size={14} className="text-[var(--color-primary)] md:w-4 md:h-4" />
-                      <span>Instant Access • Secure UPI • PDF Download</span>
+                      <span>Instant Access • Personal Guide • PDF Download</span>
                     </div>
                   </div>
 
@@ -2750,7 +2737,7 @@ export default function App() {
 
                   <div className="flex items-center justify-center gap-2 md:gap-3 text-[10px] md:text-xs text-[var(--color-muted)] font-bold uppercase tracking-widest">
                     <CheckCircle size={16} className="text-[var(--color-primary)] md:w-4.5 md:h-4.5" />
-                    <span>SSL Secured • Razorpay</span>
+                    <span>Secure • Instant Access</span>
                   </div>
                 </motion.div>
               )}
